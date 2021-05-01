@@ -1,7 +1,13 @@
 const express = require("express");
 const app = express();
 
-const { getMean, getMedian, convertToNum } = require("./math.js");
+const {
+  createFrequencyCounter,
+  getMean,
+  getMedian,
+  getMode,
+  convertToNum,
+} = require("./math.js");
 
 //mean
 app.get("/mean", (req, res) => {
@@ -20,7 +26,9 @@ app.get("/median", (req, res) => {
 
 //mode
 app.get("/mode", (req, res) => {
-  res.send("<h1>mode</h1>");
+  let queries = req.query.nums.split(",");
+  let nums = convertToNum(queries);
+  return res.json({ operation: "mode", value: `${getMode(nums)}` });
 });
 
 app.listen(3000, () => {
