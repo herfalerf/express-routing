@@ -1,3 +1,5 @@
+const ExpressError = require("./expressError");
+
 function createFrequencyCounter(arr) {
   return arr.reduce(function (acc, next) {
     acc[next] = (acc[next] || 0) + 1;
@@ -6,20 +8,23 @@ function createFrequencyCounter(arr) {
 }
 
 const getMean = (arr) => {
-  sum = arr.reduce((a, b) => a + b, 0);
-  return sum / arr.length;
+  if (arr.length === 0) return 0;
+  else {
+    sum = arr.reduce((a, b) => a + b, 0);
+    return sum / arr.length;
+  }
 };
 
 const getMedian = (arr) => {
   arr.sort((a, b) => a - b);
 
-  let middleIndex = Math.floor(nums.length / 2);
+  let middleIndex = Math.floor(arr.length / 2);
   let median;
 
-  if (nums.length % 2 === 0) {
-    median = (nums[middleIndex] + nums[middleIndex - 1]) / 2;
+  if (arr.length % 2 === 0) {
+    median = (arr[middleIndex] + arr[middleIndex - 1]) / 2;
   } else {
-    median = nums[middleIndex];
+    median = arr[middleIndex];
   }
   return median;
 };
@@ -37,11 +42,25 @@ const getMode = (arr) => {
     }
   }
 
-  return mostFrequent;
+  return +mostFrequent;
 };
 
-const convertToNum = (arr) => {
-  return (nums = arr.map((num) => Number(num)));
+const convertToNum = (numArr) => {
+  let result = [];
+
+  for (let i = 0; i < numArr.length; i++) {
+    let valToNumber = Number(numArr[i]);
+
+    if (Number.isNaN(valToNumber)) {
+      return new ExpressError(
+        `The value '${numArr[i]}' at index ${i} is not a valid number.`,
+        400
+      );
+    }
+
+    result.push(valToNumber);
+  }
+  return result;
 };
 
 module.exports = {
